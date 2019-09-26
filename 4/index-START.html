@@ -31,7 +31,7 @@
 
     // Array.prototype.filter()
     // 1. Filter the list of inventors for those who were born in the 1500's
-    const bornIn1500s = inventors.filter(x => x.year >= 1500 && x.year < 1600);
+    const bornIn1500s = inventors.filter(x => x.year > 1499 && x.year < 1600);
 
     // Array.prototype.map()
     // 2. Give us an array of the inventors' first and last names
@@ -63,7 +63,6 @@
       const [bLast,b1] = nextOne.split(', ');
       return aLast > bLast ? 1 : -1;
     });
-    
 
     // 8. Reduce Exercise
     // Sum up the instances of each of these
