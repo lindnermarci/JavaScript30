@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Type Ahead 👀</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <form class="search-form">
+    <input type="text" class="search" placeholder="City or State">
+    <ul class="suggestions">
+      <li>Filter for a city</li>
+      <li>or a state</li>
+    </ul>
+  </form>
+<script>
+
+let stations = [];
+
+var proxyUrl = 'https://cors-anywhere.herokuapp.com/',
+    targetUrl = 'https://feeds.citibikenyc.com/stations/stations.json';
+fetch(proxyUrl + targetUrl)
+  .then(blob => blob.json())
+  .then(data => {
+    stations =  data.stationBeanList;
+  })
+  .catch(e => {
+    console.log(e);
+    return e;
+  });
+
+  function findMatches(word, stations){
+    return stations.filter(station => {
+      const regex = new RegExp(word, 'gi');
+      return station.stationName.match(regex) || station.stAddress1.match(regex);
+    })
+  }
+
+  function displayMatches(){
+    const matches = findMatches(this.value, stations);
+    const html = matches.map(station =>{
+      const regex = new RegExp(this.value, 'gi');
+      const stationName = station.stationName.replace(regex, `<span id="select">${this.value}</span>`);
+      console.log(stationName);
+      return `
+      <li>
+        <span class = "name">${stationName}</span>
+        <span class = "name"> ${station.lastCommunicationTime}</span>
+      <li>
+      `;
+    }).join('');
+    suggestions.innerHTML = html;
+  }
+
+  const input = document.querySelector('.search');
+  const suggestions = document.querySelector('.suggestions');
+
+  input.addEventListener('change', displayMatches);
+  input.addEventListener('keyup', displayMatches);
+
+
+//const prom = fetch(endpoint);
+</script>
+</body>
+</html>
